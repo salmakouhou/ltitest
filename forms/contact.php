@@ -1,9 +1,18 @@
 <?php
 use PHPMailer\PHPMailer\PHPMailer.php;
+
+if(isset($_POST['name']) && isset($_POST['email'])){
+    $name = $_POST['name'];
+    $email = $_POST['email'];
+    $subject = $_POST['subject'];
+    $body = $_POST['body'];
+
 require 'PHPMailer\PHPMailer\PHPMailer.php';
 require 'PHPMailer\PHPMailer\SMTP.php';
 require 'PHPMailer\PHPMailer\Exception.php';
-$mail = new PHPMailer;
+
+
+$mail = new PHPMailer (true);
 
 //$mail->SMTPDebug = 3;                               // Enable verbose debug output
 
@@ -17,22 +26,24 @@ $mail->Port = 465;                                    // TCP port to connect to
 
 $mail->setFrom('salma.kh.1999.sk@gmail.com', 'Mailer');
 $mail->addAddress( 'salma');     // Add a recipient
-$mail->addAddress('ellen@example.com');               // Name is optional
 $mail->addReplyTo('salmakouhou6gmail.com', 'Information');
-$mail->addCC('cc@example.com');
-$mail->addBCC('bcc@example.com');
+
 
 $mail->addAttachment('/var/tmp/file.tar.gz');         // Add attachments
 $mail->addAttachment('/tmp/image.jpg', 'new.jpg');    // Optional name
 $mail->isHTML(true);                                  // Set email format to HTML
 
-$mail->Subject = 'Here is the subject';
-$mail->Body    = 'This is the HTML message body <b>in bold!</b>';
+$mail->Subject = ("$email ($subject)");
+$mail->Body    = $body;
 $mail->AltBody = 'This is the body in plain text for non-HTML mail clients';
 
 if(!$mail->send()) {
-    echo 'Message could not be sent.';
-    echo 'Mailer Error: ' . $mail->ErrorInfo;
+    $status = "success";
+    $response = "email sent";
+
 } else {
-    echo 'Message has been sent';
+    $status = "failed";
+    $response = "oups";
+    
+}
 }
